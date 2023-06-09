@@ -2,6 +2,7 @@
 #include <Zumo32U4Buzzer.h>
 #include "Afstandbediening.h"
 //#include "Routeplanner.h"
+#include "BotsDetectie.h"
 
 // Declareer lijstje met modi
 enum modi : uint8_t {
@@ -34,7 +35,8 @@ uint8_t kiesModus() {
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("bababooey");
+  Serial.println("VSZumo");
+
   // Selecteer modus met behulp van knoppen
   kiesModus();
 
@@ -51,7 +53,10 @@ void setup() {
 void loop() {
   if (buttonC.getSingleDebouncedPress()) exit(0);
   if (modus == modi::ROUTEPLANNER) {
+    Serial.println("routeplanner");
     //rp.start();
+    BotsDetectie bd = BotsDetectie();
+    bd.start();
   }
 
   if (modus == modi::AFSTANDSBEDIENING) {
