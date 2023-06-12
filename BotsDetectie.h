@@ -3,6 +3,7 @@
 
 #include <Zumo32U4ProximitySensors.h>
 #include <Zumo32U4Motors.h>
+#include <Zumo32U4Encoders.h>
 
 #define LEFT 0
 #define RIGHT 1
@@ -21,9 +22,12 @@ public:
 private:
   Zumo32U4ProximitySensors proxSensors;
   Zumo32U4Motors motors;
+  Zumo32U4Encoders encoders;
 
   uint8_t leftSensor;
   uint8_t rightSensor;
+  uint8_t countsLinks;
+  uint8_t countsRechts;
   bool objectSeen;
   bool turningLeft;
   bool turningRight;
