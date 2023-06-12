@@ -3,11 +3,13 @@
 class Motorcontroller
 {
 public:
-  void rijdVooruit(int);
+  Motorcontroller(int);
+  void rijdRecht(int);
   void maakBocht(bool);
   void stop();
 
 private: 
   Zumo32U4Motors motors;
+  int bochtsnelheid;
 };
 

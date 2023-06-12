@@ -1,7 +1,9 @@
 #include "Afstandbediening.h"
 #include <Arduino.h>
 
-Afstandbediening::Afstandbediening():mc(Motorcontroller()) {
+#define snelheid 250
+
+Afstandbediening::Afstandbediening():mc(snelheid) {
   
 }
 
@@ -17,11 +19,11 @@ void Afstandbediening::start(){
     Serial.println(letter);
 
     if(letter.indexOf("w") == 0){ //Als de letter w ingevoerd word wordt het onderstaande uitgevoerd.
-      mc.rijdVooruit(100);
+      mc.rijdRecht(snelheid);
     }
 
     if(letter.indexOf("s") == 0){ //Als de letter s ingevoerd word wordt het onderstaande uitgevoerd.
-      mc.rijdVooruit(-100);
+      mc.rijdRecht(-snelheid);
     }
 
     if(letter.indexOf("p") == 0){ //Als de letter p ingevoerd word wordt het onderstaande uitgevoerd.
