@@ -36,8 +36,8 @@ private:
 
   const uint16_t turnSpeedMax = 200;
   const uint16_t turnSpeedMin = 100;
-  const uint16_t deceleration = 10;
-  const uint16_t acceleration = 10;
+  const uint16_t deceleration = 100;
+  const uint16_t acceleration = 100;
   const uint8_t sensorLevel = 4;
   bool senseDir;
 
