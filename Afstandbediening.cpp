@@ -14,9 +14,7 @@ void Afstandbediening::koppel(){
 
 void Afstandbediening::start(){
   while(true) {
-
     letter = Serial1.readString(); //Voor het inlezen van de input en deze input in de variabele letter stoppen.
-    Serial.println(letter);
 
     if(letter.indexOf("w") == 0){ //Als de letter w ingevoerd word wordt het onderstaande uitgevoerd.
       mc.rijdRecht(snelheid);
