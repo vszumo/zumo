@@ -9,5 +9,7 @@ void Routeplanner::init() {
 }
 
 void Routeplanner::start() {
-  bd.start();
+  //bd.start();
+  lv.start();
+  lv.leesKleur();
 }

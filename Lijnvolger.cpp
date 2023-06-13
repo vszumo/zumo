@@ -1,13 +1,10 @@
 #include "Lijnvolger.h"
 #include <Arduino.h>
 
-#define snelheid 200
-
 Lijnvolger::Lijnvolger(Motorcontroller* m):ls(),mc(m) {
 }
 
 void Lijnvolger::init() {
-  mc->zetBochtSnelheid(snelheid);
   ls.initFiveSensors();
   calibreer();
 }
@@ -29,6 +26,7 @@ void Lijnvolger::calibreer() {
 void Lijnvolger::start() {
   //Zo bepalen we de positie van de robot.
   position = ls.readLine(lineSensorValues);
+  //Serial.println(position);
 
   //De error die wie hier maken is hoe ver de Zumo van de midden van de lijn verwijderd is, dit komt overeen met de positie 2000.
   error = position - 2000;
@@ -46,4 +44,15 @@ void Lijnvolger::start() {
   rightSpeed = constrain(rightSpeed, 0, (int16_t)maxSpeed);
 
   mc->zetSnelheid(leftSpeed, rightSpeed);  
+}
+
+int Lijnvolger::leesKleur() {
+  ls.readCalibrated(lineSensorValues);
+  for(int i =0; i<5;i++){
+    Serial.print(lineSensorValues[i]);
+    Serial.print(", ");
+  
+  }
+  Serial.println("");
+  return 0;  
 }

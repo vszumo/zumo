@@ -43,23 +43,26 @@ void setup() {
 
   if (modus == modi::ROUTEPLANNER) {
     rp.init();
+    Serial.println("routeplanner");
   }
 
   if (modus == modi::AFSTANDSBEDIENING) {
     ab.koppel();
+    Serial.println("afstandsbediening");
   }
 
 }
 
 void loop() {
-  if (buttonC.getSingleDebouncedPress()) exit(0);
+  if (buttonC.getSingleDebouncedPress()) {
+    mc.stop();
+    exit(0);
+  }
   if (modus == modi::ROUTEPLANNER) {
-    Serial.println("routeplanner");
     rp.start();
   }
 
   if (modus == modi::AFSTANDSBEDIENING) {
-    Serial.println("afstandsbediening");
     ab.start();
   }
 }

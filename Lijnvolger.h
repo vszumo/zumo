@@ -11,6 +11,7 @@ public:
   Lijnvolger(Motorcontroller*);
   void init();
   void start();
+  int leesKleur();
 
 private:
   Zumo32U4LineSensors ls;
@@ -22,7 +23,7 @@ private:
   int16_t speedDifference;
   int16_t leftSpeed;
   int16_t rightSpeed;
-  const uint16_t maxSpeed = 100;
+  const uint16_t maxSpeed = 200;
   void calibreer();
 };
 #endif
