@@ -1,12 +1,13 @@
 #include "Routeplanner.h"
 #include <Arduino.h>
 
-Routeplanner::Routeplanner(Motorcontroller* m):mc(m),lv(m),bd(m) {
+Routeplanner::Routeplanner(Motorcontroller* m):mc(m),lv(m),bd(m),gs(Zumo32U4IMU()) {
 
 }
 
 void Routeplanner::init() {
   lv.init();
+  gs.setup();
 }
 
 void Routeplanner::start() {
@@ -15,8 +16,8 @@ void Routeplanner::start() {
   kleur r = lv.leesKleur(4);
   if (!links && !rechts && !cirkel) {
     if (l==kleur::GRIJS && r==kleur::GRIJS) {
-      //mc->rijd20cm
-      //cirkel = true;
+      mc->rijdAfstand(200, 20);
+      cirkel = true;
     } else if (l==kleur::GRIJS) {
       Serial.println("links");
       links = true;
