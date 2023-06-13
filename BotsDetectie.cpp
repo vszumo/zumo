@@ -7,7 +7,6 @@ BotsDetectie::BotsDetectie(Motorcontroller* m):
 }
 
 void BotsDetectie::start() {
-  while(true) {
     //Zorgen dat er waardes worden gelezen met de sensor.
     proxSensors.read();
     //int waardes van sensoren toekennen.
@@ -55,7 +54,7 @@ void BotsDetectie::start() {
         rechts();
       }
     }
-  }
+  
 }
 
 void BotsDetectie::links() {
