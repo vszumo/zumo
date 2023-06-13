@@ -7,9 +7,12 @@
 
 // Declareer lijstje met kleuren
 enum kleur : uint8_t {
+  ANDERS,
   ZWART,
+  GRIJS,
   BRUIN,
-  ORANJE
+  GROEN,
+  WIT
 };
 
 class Lijnvolger
@@ -18,7 +21,7 @@ public:
   Lijnvolger(Motorcontroller*);
   void init();
   void start();
-  int leesKleur();
+  kleur leesKleur(int);
 
 private:
   Zumo32U4LineSensors ls;

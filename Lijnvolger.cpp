@@ -46,13 +46,15 @@ void Lijnvolger::start() {
   mc->zetSnelheid(leftSpeed, rightSpeed);  
 }
 
-int Lijnvolger::leesKleur() {
+kleur Lijnvolger::leesKleur(int sensor) {
   ls.readCalibrated(lineSensorValues);
-  for(int i =0; i<5;i++){
-    Serial.print(lineSensorValues[i]);
-    Serial.print(", ");
-  
-  }
-  Serial.println("");
-  return 0;  
+  unsigned int waarde = lineSensorValues[sensor];
+
+  if (waarde >= 900) return kleur::ZWART;
+  if (waarde >= 600 && waarde <= 800) return kleur::BRUIN;
+  if (waarde >= 325 && waarde <= 550) return kleur::GRIJS;
+  if (waarde >= 250 && waarde <= 300) return kleur::GROEN;
+  if (waarde <= 50) return kleur::WIT;
+
+  return kleur::ANDERS;
 }
