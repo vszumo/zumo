@@ -7,8 +7,7 @@ Lijnvolger::Lijnvolger(Motorcontroller* m):ls(),mc(m) {
 }
 
 void Lijnvolger::init() {
-  Serial.println("bababooey");
-  mc->zetSnelheid(snelheid);
+  mc->zetBochtSnelheid(snelheid);
   ls.initFiveSensors();
   calibreer();
 }
@@ -25,4 +24,26 @@ void Lijnvolger::calibreer() {
     ls.calibrate();
   }
   mc->stop();
+}
+
+void Lijnvolger::start() {
+  //Zo bepalen we de positie van de robot.
+  position = ls.readLine(lineSensorValues);
+
+  //De error die wie hier maken is hoe ver de Zumo van de midden van de lijn verwijderd is, dit komt overeen met de positie 2000.
+  error = position - 2000;
+
+  //Dit is een speciale formule om de speedDifference uit te rekenen.
+  speedDifference = error / 4 + 6 * (error - lastError);
+  lastError = error;
+
+  //Hiermee pakken we de snelheden van links en rechts, de speedDifference bepaald of die links of rechts stuurt.
+  leftSpeed = (int16_t)maxSpeed + speedDifference;
+  rightSpeed = (int16_t)maxSpeed - speedDifference;
+
+  //Hiermee beperken we de snelheden van 0 tot de maxSpeed die we eerder hebben ingesteld. Hij rijdt in principe altijd op de maximale snelheid tenzij die stilstaat.
+  leftSpeed = constrain(leftSpeed, 0, (int16_t)maxSpeed);
+  rightSpeed = constrain(rightSpeed, 0, (int16_t)maxSpeed);
+
+  mc->zetSnelheid(leftSpeed, rightSpeed);  
 }
