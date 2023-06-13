@@ -10,7 +10,7 @@ public:
   void koppel();
 
 private:
-  Motorcontroller mc;
+  Motorcontroller* mc;
   String letter;
 };
 

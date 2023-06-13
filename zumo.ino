@@ -18,7 +18,7 @@ Zumo32U4ButtonC buttonC;
 Zumo32U4Buzzer buzzer;
 
 // Maak objecten aan voor modi
-Motorcontroller mc = Motorcontroller(0);
+Motorcontroller mc = Motorcontroller();
 Afstandbediening ab = Afstandbediening(&mc);
 Routeplanner rp = Routeplanner(&mc);
 

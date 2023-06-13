@@ -1,12 +1,16 @@
 #include "Motorcontroller.h"
 #include <Arduino.h>
 
-Motorcontroller::Motorcontroller(int s):bochtsnelheid(s) {
+Motorcontroller::Motorcontroller():bochtsnelheid(0) {
 
 }
 
-void Motorcontroller::zetSnelheid(int s) {
+void Motorcontroller::zetBochtSnelheid(int s) {
   bochtsnelheid = s;
+}
+
+void Motorcontroller::zetSnelheid(int16_t l, int16_t r) {
+  motors.setSpeeds(l, r);
 }
 
 void Motorcontroller::rijdRecht(int snelheid) {

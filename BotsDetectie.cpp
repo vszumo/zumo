@@ -26,7 +26,7 @@ void BotsDetectie::start() {
 
     //Gemiddelde van turnspeed.
     turnSpeed = constrain(turnSpeed, turnSpeedMin, turnSpeedMax);
-    mc->zetSnelheid(turnSpeed);
+    mc->zetBochtSnelheid(turnSpeed);
 
     if (objectSeen) {
       //Object is zichtbaar.

@@ -7,11 +7,12 @@
 class Motorcontroller
 {
 public:
-  Motorcontroller(int);
+  Motorcontroller();
   void rijdRecht(int);
   void maakBocht(bool);
   void stop();
-  void zetSnelheid(int);
+  void zetBochtSnelheid(int);
+  void zetSnelheid(int16_t, int16_t);
 
 private: 
   Zumo32U4Motors motors;

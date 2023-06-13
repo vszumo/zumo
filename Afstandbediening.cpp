@@ -4,7 +4,7 @@
 #define snelheid 250
 
 Afstandbediening::Afstandbediening(Motorcontroller* m):mc(m) {
-  mc.zetSnelheid(snelheid);
+  mc->zetBochtSnelheid(snelheid);
 }
 
 void Afstandbediening::koppel(){
@@ -17,23 +17,23 @@ void Afstandbediening::start(){
     letter = Serial1.readString(); //Voor het inlezen van de input en deze input in de variabele letter stoppen.
 
     if(letter.indexOf("w") == 0){ //Als de letter w ingevoerd word wordt het onderstaande uitgevoerd.
-      mc.rijdRecht(snelheid);
+      mc->rijdRecht(snelheid);
     }
 
     if(letter.indexOf("s") == 0){ //Als de letter s ingevoerd word wordt het onderstaande uitgevoerd.
-      mc.rijdRecht(-snelheid);
+      mc->rijdRecht(-snelheid);
     }
 
     if(letter.indexOf("p") == 0){ //Als de letter p ingevoerd word wordt het onderstaande uitgevoerd.
-      mc.stop();
+      mc->stop();
     }
 
     if(letter.indexOf("a") == 0){ //Als de letter a ingevoerd word wordt het onderstaande uitgevoerd.
-      mc.maakBocht(0);
+      mc->maakBocht(0);
     }
 
     if(letter.indexOf("d") == 0){ //Als de letter d ingevoerd word wordt het onderstaande uitgevoerd.
-      mc.maakBocht(1);
+      mc->maakBocht(1);
     }
   }
 }
