@@ -3,6 +3,7 @@
 #include "Afstandbediening.h"
 //#include "Routeplanner.h"
 #include "BotsDetectie.h"
+#include "Motorcontroller.h"
 
 // Declareer lijstje met modi
 enum modi : uint8_t {
@@ -18,7 +19,8 @@ Zumo32U4ButtonC buttonC;
 Zumo32U4Buzzer buzzer;
 
 // Maak objecten aan voor modi
-Afstandbediening ab;
+Motorcontroller mc = Motorcontroller(0);
+Afstandbediening ab = Afstandbediening(&mc);
 //Routeplanner rp;
 
 uint8_t kiesModus() {
@@ -55,7 +57,7 @@ void loop() {
   if (modus == modi::ROUTEPLANNER) {
     Serial.println("routeplanner");
     //rp.start();
-    BotsDetectie bd = BotsDetectie();
+    BotsDetectie bd = BotsDetectie(&mc);
     bd.start();
   }
 
