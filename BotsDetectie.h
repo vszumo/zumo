@@ -4,6 +4,7 @@
 #include <Zumo32U4ProximitySensors.h>
 #include <Zumo32U4Motors.h>
 #include <Zumo32U4Encoders.h>
+#include "Motorcontroller.h"
 
 #define LEFT 0
 #define RIGHT 1
@@ -11,7 +12,7 @@
 class BotsDetectie
 {
 public:
-  BotsDetectie();
+  BotsDetectie(Motorcontroller*);
   void start();
   void links();
   void rechts();
@@ -20,8 +21,8 @@ public:
 
 
 private:
+  Motorcontroller* mc;
   Zumo32U4ProximitySensors proxSensors;
-  Zumo32U4Motors motors;
   Zumo32U4Encoders encoders;
 
   uint8_t leftSensor;

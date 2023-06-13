@@ -1,8 +1,8 @@
 #include "BotsDetectie.h"
 #include <Arduino.h>
 
-BotsDetectie::BotsDetectie():
-  proxSensors(),motors(),leftSensor(0),rightSensor(0),objectSeen(false),turningLeft(false),turningRight(false),turnSpeed(turnSpeedMax),lastTimeObjectSeen(0),senseDir(RIGHT) {
+BotsDetectie::BotsDetectie(Motorcontroller* m):
+  mc(m), proxSensors(),leftSensor(0),rightSensor(0),objectSeen(false),turningLeft(false),turningRight(false),turnSpeed(turnSpeedMax),lastTimeObjectSeen(0),senseDir(RIGHT) {
   proxSensors.initThreeSensors();
 }
 
@@ -26,56 +26,52 @@ void BotsDetectie::start() {
 
     //Gemiddelde van turnspeed.
     turnSpeed = constrain(turnSpeed, turnSpeedMin, turnSpeedMax);
+    mc->zetSnelheid(turnSpeed);
 
     if (objectSeen) {
       //Object is zichtbaar.
-      rechtdoor(500);
+      mc->rijdRecht(500);
       lastTimeObjectSeen = millis();
 
       if (leftSensor < rightSensor) {
         //Rechter sensor value is groter, dus stuur naar rechts.
-        rechts();
+        links();
         senseDir = RIGHT;
 
       } else if (leftSensor > rightSensor) {
         //Linker sensor value is groter, dus stuur naar links.
-        links();
+        rechts();
         senseDir = LEFT;
 
       } else {
         //sensor zijn gelijk, dus rij richting.
-        rechtdoor(500);
+        mc->rijdRecht(500);
       }
     } else {
       //Geen object is zichtbaar, dus draai richting het laatst gevonden object.
-      if (senseDir == RIGHT)
-      {
-      rechts();
+      if (senseDir == RIGHT) {
+        links();
       } else {
-      links();
+        rechts();
       }
     }
   }
 }
 
 void BotsDetectie::links() {
-  motors.setSpeeds(-turnSpeed, turnSpeed);
-  turningLeft = false;
-  turningRight = true;
+  mc->maakBocht(0);
+  turningLeft = true;
+  turningRight = false;
 }
 
 void BotsDetectie::rechts() {
-  motors.setSpeeds(turnSpeed, -turnSpeed);
+  mc->maakBocht(1);
   turningLeft = false;
   turningRight = true;
 }
 
-void BotsDetectie::rechtdoor(int s) {
-  motors.setSpeeds(s, s);
-}
-
 void BotsDetectie::stop() {
-  motors.setSpeeds(0, 0);
+  mc->stop();
   turningLeft = false;
   turningRight = false;
 }
