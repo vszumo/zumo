@@ -3,12 +3,14 @@
 
 #pragma once
 #include <Zumo32U4Motors.h>
+#include <Zumo32U4Encoders.h>
 
 class Motorcontroller
 {
 public:
   Motorcontroller();
   void rijdRecht(int);
+  void rijdAfstand(int, int);
   void maakBocht(bool);
   void stop();
   void zetBochtSnelheid(int);
@@ -16,6 +18,7 @@ public:
 
 private: 
   Zumo32U4Motors motors;
+  Zumo32U4Encoders encoders;
   int bochtsnelheid;
 };
 

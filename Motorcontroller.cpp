@@ -1,8 +1,10 @@
 #include "Motorcontroller.h"
 #include <Arduino.h>
 
-Motorcontroller::Motorcontroller():bochtsnelheid(0) {
+#define toerenpercm 95
 
+Motorcontroller::Motorcontroller():bochtsnelheid(0),motors(),encoders() {
+  encoders.init();
 }
 
 void Motorcontroller::zetBochtSnelheid(int s) {
@@ -15,6 +17,14 @@ void Motorcontroller::zetSnelheid(int16_t l, int16_t r) {
 
 void Motorcontroller::rijdRecht(int snelheid) {
   motors.setSpeeds(snelheid, snelheid);
+}
+
+void Motorcontroller::rijdAfstand(int snelheid, int afstand) {
+  int16_t begin = encoders.getCountsLeft();
+  motors.setSpeeds(snelheid, snelheid);
+  while (encoders.getCountsLeft - begin <= toerenpercm*afstand);
+  stop();
+  
 }
 
 void Motorcontroller::maakBocht(bool bocht) {
