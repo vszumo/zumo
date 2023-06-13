@@ -29,8 +29,19 @@ uint8_t kiesModus() {
 
   // Kies de modus door middel van de knoppen
   while (modus == modi::ONBEKEND) {
-    if (buttonA.getSingleDebouncedPress()) modus = modi::ROUTEPLANNER;
-    if (buttonB.getSingleDebouncedPress()) modus = modi::AFSTANDSBEDIENING;
+    if (buttonA.getSingleDebouncedPress()) {
+      modus = modi::ROUTEPLANNER;
+      rp.init();
+      Serial.println("routeplanner");
+
+      delay(100);
+      buttonA.waitForButton();
+    }
+    if (buttonB.getSingleDebouncedPress()) {
+      modus = modi::AFSTANDSBEDIENING;
+      ab.koppel();
+      Serial.println("afstandsbediening");
+    }
   }
 }
 
@@ -40,17 +51,6 @@ void setup() {
 
   // Selecteer modus met behulp van knoppen
   kiesModus();
-
-  if (modus == modi::ROUTEPLANNER) {
-    rp.init();
-    Serial.println("routeplanner");
-  }
-
-  if (modus == modi::AFSTANDSBEDIENING) {
-    ab.koppel();
-    Serial.println("afstandsbediening");
-  }
-
 }
 
 void loop() {
