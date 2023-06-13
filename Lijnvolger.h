@@ -5,6 +5,13 @@
 #include <Zumo32U4LineSensors.h>
 #include "Motorcontroller.h"
 
+// Declareer lijstje met kleuren
+enum kleur : uint8_t {
+  ZWART,
+  BRUIN,
+  ORANJE
+};
+
 class Lijnvolger
 {
 public:
