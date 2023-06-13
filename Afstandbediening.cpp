@@ -3,8 +3,8 @@
 
 #define snelheid 250
 
-Afstandbediening::Afstandbediening():mc(snelheid) {
-  
+Afstandbediening::Afstandbediening(Motorcontroller* m):mc(m) {
+  mc.zetSnelheid(snelheid);
 }
 
 void Afstandbediening::koppel(){

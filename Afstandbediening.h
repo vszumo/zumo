@@ -5,7 +5,7 @@
 class Afstandbediening 
 {
 public:
-  Afstandbediening();
+  Afstandbediening(Motorcontroller*);
   void start();
   void koppel();
 
