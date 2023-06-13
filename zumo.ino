@@ -1,8 +1,7 @@
 #include <Zumo32U4Buttons.h>
 #include <Zumo32U4Buzzer.h>
 #include "Afstandbediening.h"
-//#include "Routeplanner.h"
-#include "BotsDetectie.h"
+#include "Routeplanner.h"
 #include "Motorcontroller.h"
 
 // Declareer lijstje met modi
@@ -21,7 +20,7 @@ Zumo32U4Buzzer buzzer;
 // Maak objecten aan voor modi
 Motorcontroller mc = Motorcontroller(0);
 Afstandbediening ab = Afstandbediening(&mc);
-//Routeplanner rp;
+Routeplanner rp = Routeplanner(&mc);
 
 uint8_t kiesModus() {
   // Initialiseer button objecten
@@ -43,7 +42,7 @@ void setup() {
   kiesModus();
 
   if (modus == modi::ROUTEPLANNER) {
-    //rp.init();
+    rp.init();
   }
 
   if (modus == modi::AFSTANDSBEDIENING) {
@@ -56,9 +55,7 @@ void loop() {
   if (buttonC.getSingleDebouncedPress()) exit(0);
   if (modus == modi::ROUTEPLANNER) {
     Serial.println("routeplanner");
-    //rp.start();
-    BotsDetectie bd = BotsDetectie(&mc);
-    bd.start();
+    rp.start();
   }
 
   if (modus == modi::AFSTANDSBEDIENING) {
