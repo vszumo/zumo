@@ -12,7 +12,6 @@ void Routeplanner::init() {
 }
 
 void Routeplanner::start() {
-  /*
   kleur l = lv.leesKleur(0);
   kleur m = lv.leesKleur(2);
   kleur r = lv.leesKleur(4);
@@ -22,11 +21,16 @@ void Routeplanner::start() {
       if(imu.a.x <= -2000) return;
     } else if (l==kleur::GRIJS) {
       Serial.println("links");
+      mc->rijdAfstand(200,5);
       links = true;
+      return;
     } else if (r==kleur::GRIJS) {
       Serial.println("rechts");
+      mc->rijdRecht(150);
       rechts = true;
+      return;
     } else if (r==kleur::BRUIN) {
+      Serial.println("cirkel");
       mc->rijdAfstand(200, 20);
       cirkel = true;
     }
@@ -41,29 +45,24 @@ void Routeplanner::start() {
     return;
   }
 
-  if (m==kleur::WIT && links) {
-    mc->maakBocht(1);
-    //check haakse verandering
-    delay(500);
-    mc->stop();
+
+  if (links && l==kleur::ZWART) {
+    mc->maakAfslag(1);
     links = false;
     Serial.println("links klaar");
     return;
   }
 
-  if (m==kleur::WIT && rechts) {
-    mc->maakBocht(0);
-    //check haakse verandering
-    delay(500);
-    mc->stop();
+  if (rechts && r==kleur::ZWART) {
+    mc->maakAfslag(0);
+     Serial.println("rechts klaar");
     rechts = false;
-    Serial.println("rechts klaar");
     return;
   }
 
+
   lv.start();
-  */
-  printKleur();
+  //printKleur();
 }
 
 void Routeplanner::printKleur() {

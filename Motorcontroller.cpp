@@ -1,7 +1,7 @@
 #include "Motorcontroller.h"
 #include <Arduino.h>
 
-#define toerenpercm 95
+#define toerenpercm 150
 
 Motorcontroller::Motorcontroller():bochtsnelheid(0),motors(),encoders() {
   encoders.init();
@@ -22,7 +22,7 @@ void Motorcontroller::rijdRecht(int snelheid) {
 void Motorcontroller::rijdAfstand(int snelheid, int afstand) {
   int16_t begin = encoders.getCountsLeft();
   motors.setSpeeds(snelheid, snelheid);
-  while (encoders.getCountsLeft - begin <= toerenpercm*afstand);
+  while (encoders.getCountsLeft() - begin <= toerenpercm*afstand);
   stop();
   
 }
@@ -31,6 +31,24 @@ void Motorcontroller::maakBocht(bool bocht) {
   if(bocht) motors.setSpeeds(-bochtsnelheid, bochtsnelheid);
 
   if(!bocht) motors.setSpeeds(bochtsnelheid, -bochtsnelheid);
+}
+
+
+void Motorcontroller::maakAfslag(bool bocht) {
+  Serial.println("afslag");
+  if(bocht) {
+    int16_t begin = encoders.getCountsLeft();
+    motors.setSpeeds(-bochtsnelheid, bochtsnelheid);
+    while(begin - encoders.getCountsLeft() <= toerenpercm*5) Serial.println(encoders.getCountsLeft());
+    stop();
+  }
+  if (!bocht) {
+    int16_t begin = encoders.getCountsRight();
+    motors.setSpeeds(bochtsnelheid, -bochtsnelheid);
+    while(begin - encoders.getCountsRight() <= toerenpercm*5) Serial.println(encoders.getCountsRight());
+    stop();
+  }
+  Serial.println("afslag klaar");
 }
 
 void Motorcontroller::stop() {

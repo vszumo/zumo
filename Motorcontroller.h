@@ -12,6 +12,7 @@ public:
   void rijdRecht(int);
   void rijdAfstand(int, int);
   void maakBocht(bool);
+  void maakAfslag(bool);
   void stop();
   void zetBochtSnelheid(int);
   void zetSnelheid(int16_t, int16_t);
