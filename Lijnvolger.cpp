@@ -49,11 +49,12 @@ void Lijnvolger::start() {
 kleur Lijnvolger::leesKleur(int sensor) {
   ls.readCalibrated(lineSensorValues);
   unsigned int waarde = lineSensorValues[sensor];
+  //Serial.println(waarde);
 
-  if (waarde >= 900) return kleur::ZWART;
-  if (waarde >= 600 && waarde <= 800) return kleur::BRUIN;
-  if (waarde >= 325 && waarde <= 550) return kleur::GRIJS;
-  if (waarde >= 250 && waarde <= 300) return kleur::GROEN;
+  if (waarde >= 700) return kleur::ZWART;
+  if (waarde >= 375 && waarde <= 475) return kleur::BRUIN;
+  if (waarde >= 250 && waarde <= 350) return kleur::GRIJS;
+  if (waarde >= 100 && waarde <= 200) return kleur::GROEN;
   if (waarde <= 50) return kleur::WIT;
 
   return kleur::ANDERS;
