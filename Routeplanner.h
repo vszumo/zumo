@@ -4,7 +4,8 @@
 #include "Motorcontroller.h"
 #include "Lijnvolger.h"
 #include "BotsDetectie.h"
-#include "Zumo32U4Gyro.h"
+#include "Zumo32U4IMU.h"
+#include <Wire.h>
 
 class Routeplanner
 {
@@ -18,7 +19,7 @@ private:
   Motorcontroller* mc;
   Lijnvolger lv;
   BotsDetectie bd;
-  Zumo32U4Gyro gs;
+  Zumo32U4IMU imu;
   bool links;
   bool rechts;
   bool beide;
