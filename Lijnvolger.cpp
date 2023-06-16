@@ -24,12 +24,20 @@ void Lijnvolger::calibreer() {
 }
 
 void Lijnvolger::start() {
+  kleur l = leesKleur(0);
+  kleur m = leesKleur(2);
+  kleur r = leesKleur(4);
+  if (l==kleur::WIT && m==kleur::WIT && r==kleur::WIT) {
+    mc->rijdAfstand(200, 5);
+    return;
+  }
+
   //Zo bepalen we de positie van de robot.
   position = ls.readLine(lineSensorValues);
   //Serial.println(position);
 
   //De error die wie hier maken is hoe ver de Zumo van de midden van de lijn verwijderd is, dit komt overeen met de positie 2000.
-  error = position - 2000;
+  error = position - 2400;
 
   //Dit is een speciale formule om de speedDifference uit te rekenen.
   speedDifference = error / 4 + 6 * (error - lastError);
@@ -42,6 +50,10 @@ void Lijnvolger::start() {
   //Hiermee beperken we de snelheden van 0 tot de maxSpeed die we eerder hebben ingesteld. Hij rijdt in principe altijd op de maximale snelheid tenzij die stilstaat.
   leftSpeed = constrain(leftSpeed, 0, (int16_t)maxSpeed);
   rightSpeed = constrain(rightSpeed, 0, (int16_t)maxSpeed);
+  if (m==kleur::GROEN) {
+    leftSpeed = constrain(leftSpeed, 0, (int16_t)maxSpeed)/2;
+    rightSpeed = constrain(rightSpeed, 0, (int16_t)maxSpeed)/2;
+  }
 
   mc->zetSnelheid(leftSpeed, rightSpeed);  
 }
@@ -52,9 +64,9 @@ kleur Lijnvolger::leesKleur(int sensor) {
   //Serial.println(waarde);
 
   if (waarde >= 700) return kleur::ZWART;
-  if (waarde >= 375 && waarde <= 475) return kleur::BRUIN;
-  if (waarde >= 250 && waarde <= 350) return kleur::GRIJS;
-  if (waarde >= 100 && waarde <= 200) return kleur::GROEN;
+  //if (waarde > 300 && waarde < 450) return kleur::BRUIN;
+  if (waarde > 175 && waarde < 400) return kleur::GRIJS;
+  if (waarde > 75 && waarde < 175) return kleur::GROEN;
   if (waarde <= 50) return kleur::WIT;
 
   return kleur::ANDERS;

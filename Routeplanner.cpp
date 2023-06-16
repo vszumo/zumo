@@ -33,6 +33,7 @@ void Routeplanner::start() {
       Serial.println("cirkel");
       mc->rijdAfstand(200, 20);
       cirkel = true;
+      return;
     }
     
   }
@@ -55,12 +56,12 @@ void Routeplanner::start() {
 
   if (rechts && r==kleur::ZWART) {
     mc->maakAfslag(0);
-     Serial.println("rechts klaar");
+    Serial.println("rechts klaar");
     rechts = false;
     return;
   }
 
-
+  
   lv.start();
   //printKleur();
 }

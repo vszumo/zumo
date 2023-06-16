@@ -39,13 +39,13 @@ void Motorcontroller::maakAfslag(bool bocht) {
   if(bocht) {
     int16_t begin = encoders.getCountsLeft();
     motors.setSpeeds(-bochtsnelheid, bochtsnelheid);
-    while(begin - encoders.getCountsLeft() <= toerenpercm*5) Serial.println(encoders.getCountsLeft());
+    while(begin - encoders.getCountsLeft() <= toerenpercm*5);
     stop();
   }
   if (!bocht) {
     int16_t begin = encoders.getCountsRight();
     motors.setSpeeds(bochtsnelheid, -bochtsnelheid);
-    while(begin - encoders.getCountsRight() <= toerenpercm*5) Serial.println(encoders.getCountsRight());
+    while(begin - encoders.getCountsRight() <= toerenpercm*5);
     stop();
   }
   Serial.println("afslag klaar");

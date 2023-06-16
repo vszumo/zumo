@@ -58,6 +58,7 @@ void loop() {
     mc.stop();
     exit(0);
   }
+  
   if (modus == modi::ROUTEPLANNER) {
     rp.start();
   }
