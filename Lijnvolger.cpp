@@ -11,6 +11,7 @@ void Lijnvolger::init() {
 
 void Lijnvolger::calibreer() {
   delay(1000);
+  // Draai heen en weer en calibreer de sensoren steeds
   for(uint16_t i = 0; i < 120; i++) {
     if (i > 30 && i <= 90) {
       mc->maakBocht(0);
@@ -24,6 +25,7 @@ void Lijnvolger::calibreer() {
 }
 
 void Lijnvolger::start() {
+  //Lees de kleuren van de sensoren in en check of ze allemaal wit zijn
   kleur l = leesKleur(0);
   kleur m = leesKleur(2);
   kleur r = leesKleur(4);
@@ -59,12 +61,11 @@ void Lijnvolger::start() {
 }
 
 kleur Lijnvolger::leesKleur(int sensor) {
+  //Lees waardes uit de sensor en return de overeenkomende kleur
   ls.readCalibrated(lineSensorValues);
   unsigned int waarde = lineSensorValues[sensor];
-  //Serial.println(waarde);
 
   if (waarde >= 700) return kleur::ZWART;
-  //if (waarde > 300 && waarde < 450) return kleur::BRUIN;
   if (waarde > 175 && waarde < 400) return kleur::GRIJS;
   if (waarde > 75 && waarde < 175) return kleur::GROEN;
   if (waarde <= 50) return kleur::WIT;

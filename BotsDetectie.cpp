@@ -58,18 +58,21 @@ void BotsDetectie::start() {
 }
 
 void BotsDetectie::links() {
+  // Roep de motorcontroller om linksaf te slaan en sla de richting op
   mc->maakBocht(0);
   turningLeft = true;
   turningRight = false;
 }
 
 void BotsDetectie::rechts() {
+  // Roep de motorcontroller om rechtsaf te slaan en sla de richting op
   mc->maakBocht(1);
   turningLeft = false;
   turningRight = true;
 }
 
 void BotsDetectie::stop() {
+  // Roep de motorcontroller aan om te stoppen en sla de richting op
   mc->stop();
   turningLeft = false;
   turningRight = false;

@@ -12,24 +12,29 @@ void Routeplanner::init() {
 }
 
 void Routeplanner::start() {
+  // Lees de kleuren in en bepaal wat er gedaan moet worden
   kleur l = lv.leesKleur(0);
   kleur m = lv.leesKleur(2);
   kleur r = lv.leesKleur(4);
   if (!links && !rechts && !cirkel) {
     if (l==kleur::GRIJS && r==kleur::GRIJS) {
+      // Wacht
       imu.read();
       if(imu.a.x <= -2000) return;
     } else if (l==kleur::GRIJS) {
+      // Sla links af
       Serial.println("links");
       mc->rijdAfstand(200,5);
       links = true;
       return;
     } else if (r==kleur::GRIJS) {
+      // Sla rechts af
       Serial.println("rechts");
       mc->rijdRecht(150);
       rechts = true;
       return;
     } else if (r==kleur::BRUIN) {
+      // Sla op dat de robot in de cirkel is en rijd eerst recht de cirkel in
       Serial.println("cirkel");
       mc->rijdAfstand(200, 20);
       cirkel = true;
@@ -38,6 +43,7 @@ void Routeplanner::start() {
     
   }
 
+  // Start de botsdetectie als de robot zich in de cirkel bevind en stop het programma bij het overschrijven van de zwarte lijn
   if (cirkel) {
     bd.start();
     if (l==kleur::ZWART | m==kleur::ZWART | r==kleur::ZWART) {
@@ -46,7 +52,7 @@ void Routeplanner::start() {
     return;
   }
 
-
+  // Ga naar links als er net een opkomende bocht is geregistreerd naar links en er nu links een zwarte lijn zichtbaar is
   if (links && l==kleur::ZWART) {
     mc->maakAfslag(1);
     links = false;
@@ -54,6 +60,7 @@ void Routeplanner::start() {
     return;
   }
 
+  // Ga naar rechts als er net een opkomende bocht is geregistreerd naar rechts en er nu rechts een zwarte lijn zichtbaar is
   if (rechts && r==kleur::ZWART) {
     mc->maakAfslag(0);
     Serial.println("rechts klaar");
@@ -63,9 +70,9 @@ void Routeplanner::start() {
 
   
   lv.start();
-  //printKleur();
 }
 
+// Debug functie voor het controleren van de sensorwaarden
 void Routeplanner::printKleur() {
   Serial.print("Kleuren: ");
 

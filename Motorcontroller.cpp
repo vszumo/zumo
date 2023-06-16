@@ -20,8 +20,11 @@ void Motorcontroller::rijdRecht(int snelheid) {
 }
 
 void Motorcontroller::rijdAfstand(int snelheid, int afstand) {
+  // Lees de encoders uit en zet de motoren aan
   int16_t begin = encoders.getCountsLeft();
   motors.setSpeeds(snelheid, snelheid);
+
+  // Wacht tot de gewenste afstand bereikt is met het uitschakelen van de motoren
   while (encoders.getCountsLeft() - begin <= toerenpercm*afstand);
   stop();
   
@@ -37,14 +40,19 @@ void Motorcontroller::maakBocht(bool bocht) {
 void Motorcontroller::maakAfslag(bool bocht) {
   Serial.println("afslag");
   if(bocht) {
+    // Sla linksaf door de motoren de omgekeerde snelheid te geven
     int16_t begin = encoders.getCountsLeft();
     motors.setSpeeds(-bochtsnelheid, bochtsnelheid);
+
+    // Wacht tot de gewenste afstand bereikt is met het uitschakelen van de motoren
     while(begin - encoders.getCountsLeft() <= toerenpercm*5);
     stop();
-  }
-  if (!bocht) {
+  } else {
+    // Sla rechtsaf door de motoren de omgekeerde snelheid te geven
     int16_t begin = encoders.getCountsRight();
     motors.setSpeeds(bochtsnelheid, -bochtsnelheid);
+
+    // Wacht tot de gewenste afstand bereikt is met het uitschakelen van de motoren
     while(begin - encoders.getCountsRight() <= toerenpercm*5);
     stop();
   }
