@@ -90,7 +90,7 @@ void Routeplanner::printKleur() {
   Serial.print("Kleuren: ");
 
   // van alle 3 de lijnsensoren wordt de waarde opgevraagd en de corresponderende kleur geprint
-  for (unsigned int =0; i<3; i++) {
+  for (unsigned int i=0; i<3; i++) {
     kleur sensorkleur;
     if (i==0) sensorkleur = lv.leesKleur(0);
     if (i==1) sensorkleur = lv.leesKleur(2);
