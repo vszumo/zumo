@@ -2,6 +2,7 @@
 #define MOTORCONTROLLER_H
 
 #pragma once
+
 #include <Zumo32U4Motors.h>
 #include <Zumo32U4Encoders.h>
 
@@ -21,6 +22,7 @@ private:
   Zumo32U4Motors motors;
   Zumo32U4Encoders encoders;
   int bochtsnelheid;
+
 };
 
 #endif
