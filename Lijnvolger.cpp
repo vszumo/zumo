@@ -69,12 +69,6 @@ void Lijnvolger::start() {
   kleur l = leesKleur(0);
   kleur m = leesKleur(2);
   kleur r = leesKleur(4);
-  /*
-  if (l==kleur::WIT && m==kleur::WIT && r==kleur::WIT) {
-    mc->rijdAfstand(200, 5);
-    return;
-  }
-  */
 
   //Zo bepalen we de positie van de robot.
   position = ls.readLine(lineSensorValues);

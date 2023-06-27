@@ -1,18 +1,23 @@
 #include "BotsDetectie.h"
 #include <Arduino.h>
 
+// BotsDetectie() construeert de botsdetectie, initialiseert hierbij een aantal attributen en de proximity sensor.
 BotsDetectie::BotsDetectie(Motorcontroller* m):
   mc(m), proxSensors(),leftSensor(0),rightSensor(0),objectSeen(false),turningLeft(false),turningRight(false),turnSpeed(turnSpeedMax),lastTimeObjectSeen(0),senseDir(RIGHT) {
   proxSensors.initThreeSensors();
 }
 
+// start() begint de botsdetectie cyclus
 void BotsDetectie::start() {
+
     //Zorgen dat er waardes worden gelezen met de sensor.
     proxSensors.read();
+
     //int waardes van sensoren toekennen.
     leftSensor = proxSensors.countsFrontWithLeftLeds();
     rightSensor = proxSensors.countsFrontWithRightLeds();
 
+    //opslaan of er een object zichtbaar is
     objectSeen = leftSensor >= sensorLevel || rightSensor >= sensorLevel;
 
     if (objectSeen) { 
@@ -27,27 +32,34 @@ void BotsDetectie::start() {
     turnSpeed = constrain(turnSpeed, turnSpeedMin, turnSpeedMax);
     mc->zetBochtSnelheid(turnSpeed);
 
+    //Object is zichtbaar.
     if (objectSeen) {
-      //Object is zichtbaar.
+      
+      //rijd vooruit en sla de huidige tijd op waarop een object is gezien
       mc->rijdRecht(500);
       lastTimeObjectSeen = millis();
 
+      //Rechter sensor value is groter, dus stuur naar rechts.
       if (leftSensor < rightSensor) {
-        //Rechter sensor value is groter, dus stuur naar rechts.
         links();
         senseDir = RIGHT;
-
-      } else if (leftSensor > rightSensor) {
-        //Linker sensor value is groter, dus stuur naar links.
+      }
+      
+      //Linker sensor value is groter, dus stuur naar links.
+      else if (leftSensor > rightSensor) {
         rechts();
         senseDir = LEFT;
-
-      } else {
-        //sensor zijn gelijk, dus rij richting.
+      }
+      
+      //sensor zijn gelijk, dus rij richting.
+      else {
         mc->rijdRecht(500);
       }
-    } else {
-      //Geen object is zichtbaar, dus draai richting het laatst gevonden object.
+
+    }
+    
+    //Geen object is zichtbaar, dus draai richting het laatst gevonden object.
+    else {
       if (senseDir == RIGHT) {
         links();
       } else {
@@ -57,22 +69,22 @@ void BotsDetectie::start() {
   
 }
 
+// links() roept de motorcontroller om linksaf te slaan en slaat de richting op
 void BotsDetectie::links() {
-  // Roep de motorcontroller om linksaf te slaan en sla de richting op
   mc->maakBocht(0);
   turningLeft = true;
   turningRight = false;
 }
 
+// rechts() roept de motorcontroller om rechtsaf te slaan en slaat de richting op
 void BotsDetectie::rechts() {
-  // Roep de motorcontroller om rechtsaf te slaan en sla de richting op
   mc->maakBocht(1);
   turningLeft = false;
   turningRight = true;
 }
 
+// stop() roept de motorcontroller aan om te stoppen en slaat de richting op
 void BotsDetectie::stop() {
-  // Roep de motorcontroller aan om te stoppen en sla de richting op
   mc->stop();
   turningLeft = false;
   turningRight = false;
