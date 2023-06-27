@@ -15,7 +15,6 @@ modi modus = modi::ONBEKEND;
 
 // Maak hulpobjecten aan uit Zumo32U4 Library
 Zumo32U4ButtonC buttonC;
-Zumo32U4Buzzer buzzer;
 
 // Maak objecten aan voor modi
 Motorcontroller mc;
@@ -29,6 +28,8 @@ uint8_t kiesModus() {
 
   // Kies de modus door middel van de knoppen
   while (modus == modi::ONBEKEND) {
+
+    // Initialiseer de routeplanner modus als er op knop A wordt gedrukt
     if (buttonA.getSingleDebouncedPress()) {
       modus = modi::ROUTEPLANNER;
       rp.init();
@@ -37,6 +38,8 @@ uint8_t kiesModus() {
       delay(100);
       buttonA.waitForButton();
     }
+
+    // Initialiseer de afstandsbediening modus als er op knop B wordt gedrukt
     if (buttonB.getSingleDebouncedPress()) {
       modus = modi::AFSTANDSBEDIENING;
       ab.koppel();
@@ -46,6 +49,7 @@ uint8_t kiesModus() {
 }
 
 void setup() {
+  // Start de seriele verbinding voor het debuggen
   Serial.begin(9600);
   Serial.println("VSZumo");
 
@@ -54,16 +58,13 @@ void setup() {
 }
 
 void loop() {
+  // Stop het programma als er op knop C wordt gedrukt
   if (buttonC.getSingleDebouncedPress()) {
     mc.stop();
     exit(0);
   }
   
-  if (modus == modi::ROUTEPLANNER) {
-    rp.start();
-  }
-
-  if (modus == modi::AFSTANDSBEDIENING) {
-    ab.start();
-  }
+  // Start de gekozen modus
+  if (modus == modi::ROUTEPLANNER) rp.start();
+  if (modus == modi::AFSTANDSBEDIENING) ab.start();
 }
