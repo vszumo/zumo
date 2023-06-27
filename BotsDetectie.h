@@ -9,20 +9,54 @@
 #define LEFT 0
 #define RIGHT 1
 
+/**
+ * @brief Botsdetectie klasse die gebruikt wordt om een object te vinden en deze uit een cirkel te duwen.
+ */
 class BotsDetectie
 {
 public:
+  /**
+   * Construeer de Botsdetectie.
+   * @brief Constructor.
+   * @param mc Pointer van de motorcontroller.
+   */
   BotsDetectie(Motorcontroller*);
+
+  /**
+   * @brief Start het Botsdetectie proces.
+   */
   void start();
+
+  /**
+   * @brief Draai naar links.
+   */
   void links();
+
+  /**
+   * @brief Draai naar rechts.
+   */
   void rechts();
-  void rechtdoor(int);
+
+  /**
+   * @brief Stop met bewegen.
+   */
   void stop();
 
 
 private:
+  /**
+   * Pointer van de motorcontroller
+   */
   Motorcontroller* mc;
+
+  /**
+   * Zumo32U4ProximitySensors object waarmee de proximitysensors worden uitgelezen.
+   */
   Zumo32U4ProximitySensors proxSensors;
+
+  /**
+   * Zumo32U4Encoders object waarmee de encoders worden uitgelezen.
+   */
   Zumo32U4Encoders encoders;
 
   uint8_t leftSensor;
