@@ -29,7 +29,7 @@ private:
   Motorcontroller* mc;
   Zumo32U4ButtonC buttonc;
   unsigned int lineSensorValues[5];
-  unsigned int waardes[3][3];
+  unsigned int waardes[3][5];
   int16_t position;
   int16_t lastError;
   int16_t error;

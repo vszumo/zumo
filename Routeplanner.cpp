@@ -10,6 +10,7 @@ Routeplanner::Routeplanner(Motorcontroller* m):mc(m),lv(m),bd(m),imu() {
 void Routeplanner::init() {
   lv.init();
   Wire.begin();
+  imu.init();
   imu.enableDefault();
 }
 
@@ -17,21 +18,29 @@ void Routeplanner::init() {
 void Routeplanner::start() {
   // de kleuren worden opgevraagd van de lijnvolger klasse
   kleur l = lv.leesKleur(0);
+  kleur lm = lv.leesKleur(1);
   kleur m = lv.leesKleur(2);
+  kleur rm = lv.leesKleur(3);
   kleur r = lv.leesKleur(4);
-  
+
   // als er nog geen status (opkomende bocht of eindcirkel) is opgeslagen kan naar de huidige sensorwaarden worden gekeken
   if (!links && !rechts && !cirkel) {
 
     // als er aan beide kanten een grijze lijn zichtbaar is blijft de robot staan totdat de juiste angle is bereikt
-    if (l==kleur::GRIJS && r==kleur::GRIJS) {
+    if ((lm==kleur::GRIJS || m==kleur::GRIJS || rm==kleur::GRIJS) && l==kleur::GRIJS && r==kleur::GRIJS) {
+      Serial.println("stoplijn");
+      
       // Wacht
       imu.read();
-      if(imu.a.x <= -2000) return;
+
+      if (imu.a.x >= -2000) {
+        mc->stop();
+        return;
+      }
     } 
-    
+
     // als er links een grijze lijn zichtbaar is wordt dat opgeslagen en wordt er 5cm vooruit gereden
-    else if (l==kleur::GRIJS) {
+    else if (l==kleur::GRIJS && (lm==kleur::ZWART || m==kleur::ZWART || rm==kleur::ZWART)) {
       Serial.println("links");
       mc->rijdAfstand(200,5);
       links = true;
@@ -39,7 +48,7 @@ void Routeplanner::start() {
     }
     
     // als er rechts een grijze lijn zichtbaar is wordt dat opgeslagen en wordt er 5cm vooruit gereden
-    else if (r==kleur::GRIJS) {
+    else if (r==kleur::GRIJS && (lm==kleur::ZWART || m==kleur::ZWART || rm==kleur::ZWART)) {
       Serial.println("rechts");
       mc->rijdAfstand(200,5);
       rechts = true;
@@ -60,14 +69,15 @@ void Routeplanner::start() {
     bd.start();
 
     // zodra er een zwarte lijn zichtbaar is wordt het programma afgesloten omdat de robot dan de cirkel uit is
-    if (l==kleur::ZWART | m==kleur::ZWART | r==kleur::ZWART) {
+    if (l==kleur::ZWART || lm==kleur::ZWART || m==kleur::ZWART || rm==kleur::ZWART || r==kleur::ZWART) {
+      mc->stop();
       exit(0);
     }
     return;
   }
 
   // als de robot naar links moet wordt er een afslag gemaakt en opgeslagen dat de bocht voltooid is
-  if (links) {
+  if (links && (lm==kleur::ZWART || m==kleur::ZWART || rm==kleur::ZWART)) {
     mc->maakAfslag(1);
     links = false;
     Serial.println("links klaar");
@@ -75,7 +85,7 @@ void Routeplanner::start() {
   }
 
   // als de robot naar rechts moet wordt er een afslag gemaakt en opgeslagen dat de bocht voltoold is
-  if (rechts) {
+  if (rechts && (lm==kleur::ZWART || m==kleur::ZWART || rm==kleur::ZWART)) {
     mc->maakAfslag(0);
     Serial.println("rechts klaar");
     rechts = false;
@@ -89,12 +99,9 @@ void Routeplanner::start() {
 void Routeplanner::printKleur() {
   Serial.print("Kleuren: ");
 
-  // van alle 3 de lijnsensoren wordt de waarde opgevraagd en de corresponderende kleur geprint
-  for (unsigned int i=0; i<3; i++) {
-    kleur sensorkleur;
-    if (i==0) sensorkleur = lv.leesKleur(0);
-    if (i==1) sensorkleur = lv.leesKleur(2);
-    if (i==2) sensorkleur = lv.leesKleur(4);
+  // van alle 5 de lijnsensoren wordt de waarde opgevraagd en de corresponderende kleur geprint
+  for (unsigned int i=0; i<5; i++) {
+    kleur sensorkleur = lv.leesKleur(i);
 
     // print de corresponderende kleur op basis van de enum waarde kleur
     switch(sensorkleur) {

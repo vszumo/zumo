@@ -29,6 +29,9 @@ void Lijnvolger::calibreerzwart() {
 
   // als de loop klaar is worden de motoren weer uitgezet
   mc->stop();
+
+  // print naar de serial console zodra het kalibreren gelukt is
+  Serial.println("zwart gekalibreeerd");
 }
 
 // calibreerkleuren() slaat van alle sensoren de waarden per kleur op zodat deze later kunnen worden gebruikt om te checken welke kleur de lijn heeft.
@@ -39,10 +42,24 @@ void Lijnvolger::calibreerkleuren() {
     buttonc.waitForButton();
     ls.readCalibrated(lineSensorValues);
     
-    // sensor links, midden en rechts worden opgeslagen in de 2 dimensionale array
-    waardes[kleur][0] = lineSensorValues[0];
-    waardes[kleur][1] = lineSensorValues[2];
-    waardes[kleur][2] = lineSensorValues[4];
+    // de sensorwaardes worden opgeslagen in de 2 dimensionale array
+    for (unsigned int i=0; i<5; i++) waardes[kleur][i] = lineSensorValues[i];
+
+    // print naar de serial console zodra het kalibreren gelukt is
+    if(kleur==0) Serial.print("grijs gekalibreerd: ");
+    else if(kleur==1) Serial.print("bruin gekalibreerd: ");
+    else if(kleur==2) Serial.print("groen gekalibreerd: ");
+
+    // print gekalibreerde waardes naar serial console
+    Serial.print(lineSensorValues[0]);
+    Serial.print(", ");
+    Serial.print(lineSensorValues[1]);
+    Serial.print(", ");
+    Serial.print(lineSensorValues[2]);
+    Serial.print(", ");
+    Serial.print(lineSensorValues[3]);
+    Serial.print(", ");
+    Serial.println(lineSensorValues[4]);
   }
 }
 
@@ -61,7 +78,6 @@ void Lijnvolger::start() {
 
   //Zo bepalen we de positie van de robot.
   position = ls.readLine(lineSensorValues);
-  //Serial.println(position);
 
   //De error die wie hier maken is hoe ver de Zumo van de midden van de lijn verwijderd is, dit komt overeen met de positie 2000.
   error = position - 2000;
@@ -98,10 +114,10 @@ kleur Lijnvolger::leesKleur(int sensor) {
   if (waarde >= grijs-25 && waarde <= grijs+25) return kleur::GRIJS;
   
   unsigned int bruin = waardes[1][sensor];
-  if (waarde >= bruin-25 && waarde <= bruin+25) return kleur::BRUIN;
+  if (waarde >= bruin-50 && waarde <= bruin+50) return kleur::BRUIN;
 
   unsigned int groen = waardes[2][sensor];
-  if (waarde >= groen-25 && waarde <= groen+25) return kleur::GROEN;
+  if (waarde >= groen-50 && waarde <= groen+50) return kleur::GROEN;
   
   if (waarde <= 50) return kleur::WIT;
 
